@@ -134,6 +134,47 @@ This project includes comprehensive `.gitignore` files to exclude unnecessary fi
 - Editor configuration files (`.vscode/`, `.idea/`)
 - Docker-related temporary files
 
+## Kubernetes Deployment
+
+This project includes Kubernetes manifests for deploying the application to a Kubernetes cluster.
+
+### Prerequisites
+
+- Kubernetes cluster (local or cloud)
+- `kubectl` configured to connect to your cluster
+- Docker image built and available in your cluster
+
+### Deploy to Kubernetes
+
+1. **Build the Docker image**:
+   ```bash
+   docker build -t dotnet-app-sample:latest .
+   ```
+
+2. **Deploy to Kubernetes**:
+   ```bash
+   kubectl apply -f deployment/k8s/
+   ```
+
+3. **Check deployment status**:
+   ```bash
+   kubectl get pods -l app=dotnet-app-sample
+   kubectl get services -l app=dotnet-app-sample
+   kubectl get hpa dotnet-app-sample-hpa
+   ```
+
+4. **Access the application**:
+   ```bash
+   kubectl port-forward svc/dotnet-app-sample-service 8080:80
+   curl http://localhost:8080/hello
+   ```
+
+### Kubernetes Resources
+
+- **Deployment**: Manages 3 replicas of the application with health checks
+- **Service**: ClusterIP service exposing the application internally
+- **HPA**: Horizontal Pod Autoscaler scaling between 2-10 pods based on CPU/memory usage
+
 ## Project Structure
 
 ```
@@ -142,6 +183,11 @@ dotnet-app-sample/
 │   └── workflows/           # GitHub Actions workflows
 │       ├── docker-build.yml # Comprehensive build pipeline
 │       └── docker-build-check.yml # Minimal build check
+├── deployment/
+│   └── k8s/                # Kubernetes manifests
+│       ├── deployment.yaml # Kubernetes deployment
+│       ├── service.yaml    # Kubernetes service
+│       └── hpa.yaml        # Horizontal Pod Autoscaler
 ├── DotnetAppSample/         # .NET project directory
 │   ├── Program.cs          # Main application file
 │   ├── DotnetAppSample.csproj # Project file

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: dotnet-app-sample-service
+  namespace: default
+  labels:
+    app: dotnet-app-sample
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 8080
+    protocol: TCP
+    name: http
+  - port: 443
+    targetPort: 8081
+    protocol: TCP
+    name: https
+  selector:
+    app: dotnet-app-sample

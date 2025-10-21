@@ -1,7 +1,43 @@
 # Structure
 - [dotnet-app-sample](./dotnet-app-sample/) - example dotnet app
 
-# MCP settings examples
+# MCP servers
+
+Run local docker mcp gateway:
+```powershell
+docker mcp gateway run
+```
+
+## GitHub
+```powershell
+docker run -i --rm -e GITHUB_PERSONAL_ACCESS_TOKEN=<your-token> -e GITHUB_TOOLSETS="all" ghcr.io/github/github-mcp-server
+```
+
+```json
+{
+  "mcpServers": {
+    "github": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "-e",
+        "GITHUB_TOOLSETS",
+        "ghcr.io/github/github-mcp-server"
+      ],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_GITHUB_PAT",
+        "GITHUB_TOOLSETS": "all"
+      }
+    }
+  }
+}
+```
+
+# Remote MCP settings examples
 ## Cursor mcp.json with MCP_DOCKER example
 ```json
 {
