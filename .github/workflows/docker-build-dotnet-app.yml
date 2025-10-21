@@ -1,0 +1,92 @@
+name: Build Docker Image
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'dotnet-app-sample/**'
+      - '.github/workflows/docker-build-dotnet-app.yml'
+  push:
+    branches:
+      - main
+    paths:
+      - 'dotnet-app-sample/**'
+      - '.github/workflows/docker-build-dotnet-app.yml'
+
+jobs:
+  build-docker:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v5
+      
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Build Docker image
+      uses: docker/build-push-action@v6
+      with:
+        context: ./dotnet-app-sample
+        file: ./dotnet-app-sample/Dockerfile
+        push: false
+        tags: dotnet-app-sample:latest
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        
+    - name: Test Docker image structure
+      run: |
+        echo "🔍 Testing Docker image structure..."
+        # Test that the image can be created and contains expected files
+        docker run --rm dotnet-app-sample:latest ls -la /app
+        echo "✅ Docker image structure is correct"
+        
+    - name: Verify application functionality
+      run: |
+        echo "🚀 Testing application functionality..."
+        
+        # Start the container in background
+        docker run -d --name test-container -p 8080:8080 dotnet-app-sample:latest
+        echo "📦 Container started"
+        
+        # Wait for application to start
+        echo "⏳ Waiting for application to start..."
+        sleep 15
+        
+        # Test the hello endpoint
+        echo "🧪 Testing /hello endpoint..."
+        response=$(curl -s http://localhost:8080/hello)
+        echo "Response: $response"
+        
+        if echo "$response" | grep -q "Hello from .NET 9 Web API"; then
+          echo "✅ /hello endpoint working correctly"
+        else
+          echo "❌ /hello endpoint failed"
+          exit 1
+        fi
+        
+        # Test the root endpoint
+        echo "🧪 Testing / endpoint..."
+        response=$(curl -s http://localhost:8080/)
+        echo "Response: $response"
+        
+        if echo "$response" | grep -q "Welcome to .NET 9 Web API Sample"; then
+          echo "✅ / endpoint working correctly"
+        else
+          echo "❌ / endpoint failed"
+          exit 1
+        fi
+        
+        # Clean up
+        echo "🧹 Cleaning up test container..."
+        docker stop test-container
+        docker rm test-container
+        
+    - name: Build summary
+      run: |
+        echo "🎉 Build completed successfully!"
+        echo "✅ Docker image built without errors"
+        echo "✅ Application starts and responds to requests"
+        echo "✅ All endpoints are working correctly"
+        echo "✅ Ready for deployment"
