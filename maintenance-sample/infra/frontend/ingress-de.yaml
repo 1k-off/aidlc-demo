@@ -1,0 +1,28 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: aidlc-frontend-ingress-de
+  namespace: aidlc-demo
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - match: Host(`de.aidlc.ukad.dev`)
+      kind: Rule
+      services:
+        - name: aidlc-frontend-service
+          port: 80
+      middlewares:
+        - name: aidlc-siteheader-de
+  tls:
+    secretName: aidlc-frontend-ssl
+---
+apiVersion: traefik.io/v1alpha1
+kind: Middleware
+metadata:
+  name: aidlc-siteheader-de
+  namespace: aidlc-demo
+spec:
+  headers:
+    customRequestHeaders:
+      X-Site-Language: "de"

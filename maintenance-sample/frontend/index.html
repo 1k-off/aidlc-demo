@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Multi-Language Sample Page</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .language-switcher {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            justify-content: center;
+        }
+
+        .lang-btn {
+            padding: 10px 20px;
+            border: 2px solid #667eea;
+            background: transparent;
+            color: #667eea;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .lang-btn:hover, .lang-btn.active {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .current-language {
+            text-align: center;
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2.5em;
+        }
+
+        .content-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            color: #34495e;
+            margin-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .feature-card {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .feature-card h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .status-active {
+            background: #27ae60;
+            color: white;
+        }
+
+        .status-maintenance {
+            background: #f39c12;
+            color: white;
+        }
+
+        .footer {
+            text-align: center;
+            color: rgba(255, 255, 255, 0.8);
+            margin-top: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .header, .content-section {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2em;
+            }
+            
+            .language-switcher {
+                flex-wrap: wrap;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="language-switcher">
+                <button class="lang-btn" onclick="setLanguage('en')">English</button>
+                <button class="lang-btn" onclick="setLanguage('es')">Español</button>
+                <button class="lang-btn" onclick="setLanguage('fr')">Français</button>
+                <button class="lang-btn" onclick="setLanguage('de')">Deutsch</button>
+                <button class="lang-btn" onclick="setLanguage('uk')">Українська</button>
+            </div>
+            <div class="current-language" id="currentLang"></div>
+            <h1 id="pageTitle">Multi-Language Sample Page</h1>
+        </div>
+
+        <div class="content-section">
+            <div class="status-indicator status-active" id="statusIndicator">Active</div>
+            <h2 id="welcomeTitle">Welcome to Our Sample Page</h2>
+            <p id="welcomeText">This is a demonstration of a multi-language website that automatically detects the user's preferred language based on the X-site-language header. The page content will change dynamically to provide the best user experience in their preferred language.</p>
+        </div>
+
+        <div class="content-section">
+            <h2 id="featuresTitle">Key Features</h2>
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3 id="feature1Title">Language Detection</h3>
+                    <p id="feature1Desc">Automatically detects language from HTTP headers and displays appropriate content.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 id="feature2Title">Responsive Design</h3>
+                    <p id="feature2Desc">Beautiful, modern design that works perfectly on all devices and screen sizes.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 id="feature3Title">Real-time Switching</h3>
+                    <p id="feature3Desc">Users can manually switch languages using the language selector buttons.</p>
+                </div>
+                <div class="feature-card">
+                    <h3 id="feature4Title">Fallback Support</h3>
+                    <p id="feature4Desc">Gracefully falls back to English if the requested language is not available.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <h2 id="instructionsTitle">How It Works</h2>
+            <p id="instructionsText">This page checks for the "X-site-language" header when it loads. If the header is present and contains a supported language code (en, es, fr, de), the page content will automatically display in that language. You can also manually switch languages using the buttons above.</p>
+        </div>
+
+        <div class="footer">
+            <p id="footerText">© 2024 Multi-Language Sample Page. Built with modern web technologies.</p>
+        </div>
+    </div>
+
+    <script>
+        // Language content definitions
+        const languages = {
+            en: {
+                pageTitle: "Multi-Language Sample Page",
+                currentLang: "Current Language: English",
+                statusIndicator: "Active",
+                welcomeTitle: "Welcome to Our Sample Page",
+                welcomeText: "This is a demonstration of a multi-language website that automatically detects the user's preferred language based on the X-site-language header. The page content will change dynamically to provide the best user experience in their preferred language.",
+                featuresTitle: "Key Features",
+                feature1Title: "Language Detection",
+                feature1Desc: "Automatically detects language from HTTP headers and displays appropriate content.",
+                feature2Title: "Responsive Design",
+                feature2Desc: "Beautiful, modern design that works perfectly on all devices and screen sizes.",
+                feature3Title: "Real-time Switching",
+                feature3Desc: "Users can manually switch languages using the language selector buttons.",
+                feature4Title: "Fallback Support",
+                feature4Desc: "Gracefully falls back to English if the requested language is not available.",
+                instructionsTitle: "How It Works",
+                instructionsText: "This page checks for the \"X-site-language\" header when it loads. If the header is present and contains a supported language code (en, es, fr, de, uk), the page content will automatically display in that language. You can also manually switch languages using the buttons above.",
+                footerText: "© 2024 Multi-Language Sample Page. Built with modern web technologies."
+            },
+            es: {
+                pageTitle: "Página de Muestra Multiidioma",
+                currentLang: "Idioma Actual: Español",
+                statusIndicator: "Activo",
+                welcomeTitle: "Bienvenido a Nuestra Página de Muestra",
+                welcomeText: "Esta es una demostración de un sitio web multiidioma que detecta automáticamente el idioma preferido del usuario basándose en el encabezado X-site-language. El contenido de la página cambiará dinámicamente para proporcionar la mejor experiencia de usuario en su idioma preferido.",
+                featuresTitle: "Características Principales",
+                feature1Title: "Detección de Idioma",
+                feature1Desc: "Detecta automáticamente el idioma desde los encabezados HTTP y muestra el contenido apropiado.",
+                feature2Title: "Diseño Responsivo",
+                feature2Desc: "Diseño hermoso y moderno que funciona perfectamente en todos los dispositivos y tamaños de pantalla.",
+                feature3Title: "Cambio en Tiempo Real",
+                feature3Desc: "Los usuarios pueden cambiar manualmente los idiomas usando los botones selector de idioma.",
+                feature4Title: "Soporte de Respaldo",
+                feature4Desc: "Se respalda elegantemente al inglés si el idioma solicitado no está disponible.",
+                instructionsTitle: "Cómo Funciona",
+                instructionsText: "Esta página verifica el encabezado \"X-site-language\" cuando se carga. Si el encabezado está presente y contiene un código de idioma soportado (en, es, fr, de, uk), el contenido de la página se mostrará automáticamente en ese idioma. También puedes cambiar manualmente los idiomas usando los botones de arriba.",
+                footerText: "© 2024 Página de Muestra Multiidioma. Construida con tecnologías web modernas."
+            },
+            fr: {
+                pageTitle: "Page d'Exemple Multilingue",
+                currentLang: "Langue Actuelle: Français",
+                statusIndicator: "Actif",
+                welcomeTitle: "Bienvenue sur Notre Page d'Exemple",
+                welcomeText: "Ceci est une démonstration d'un site web multilingue qui détecte automatiquement la langue préférée de l'utilisateur basée sur l'en-tête X-site-language. Le contenu de la page changera dynamiquement pour fournir la meilleure expérience utilisateur dans leur langue préférée.",
+                featuresTitle: "Fonctionnalités Clés",
+                feature1Title: "Détection de Langue",
+                feature1Desc: "Détecte automatiquement la langue depuis les en-têtes HTTP et affiche le contenu approprié.",
+                feature2Title: "Design Responsive",
+                feature2Desc: "Design beau et moderne qui fonctionne parfaitement sur tous les appareils et tailles d'écran.",
+                feature3Title: "Changement en Temps Réel",
+                feature3Desc: "Les utilisateurs peuvent changer manuellement les langues en utilisant les boutons de sélection de langue.",
+                feature4Title: "Support de Fallback",
+                feature4Desc: "Revient élégamment à l'anglais si la langue demandée n'est pas disponible.",
+                instructionsTitle: "Comment Ça Marche",
+                instructionsText: "Cette page vérifie l'en-tête \"X-site-language\" lors du chargement. Si l'en-tête est présent et contient un code de langue supporté (en, es, fr, de, uk), le contenu de la page s'affichera automatiquement dans cette langue. Vous pouvez aussi changer manuellement les langues en utilisant les boutons ci-dessus.",
+                footerText: "© 2024 Page d'Exemple Multilingue. Construite avec des technologies web modernes."
+            },
+            de: {
+                pageTitle: "Mehrsprachige Beispielseite",
+                currentLang: "Aktuelle Sprache: Deutsch",
+                statusIndicator: "Aktiv",
+                welcomeTitle: "Willkommen auf unserer Beispielseite",
+                welcomeText: "Dies ist eine Demonstration einer mehrsprachigen Website, die automatisch die bevorzugte Sprache des Benutzers basierend auf dem X-site-language-Header erkennt. Der Seiteninhalt wird dynamisch geändert, um die beste Benutzererfahrung in ihrer bevorzugten Sprache zu bieten.",
+                featuresTitle: "Hauptfunktionen",
+                feature1Title: "Spracherkennung",
+                feature1Desc: "Erkennt automatisch die Sprache aus HTTP-Headern und zeigt den entsprechenden Inhalt an.",
+                feature2Title: "Responsives Design",
+                feature2Desc: "Schönes, modernes Design, das perfekt auf allen Geräten und Bildschirmgrößen funktioniert.",
+                feature3Title: "Echtzeit-Umschaltung",
+                feature3Desc: "Benutzer können Sprachen manuell mit den Sprachauswahl-Buttons wechseln.",
+                feature4Title: "Fallback-Unterstützung",
+                feature4Desc: "Fällt elegant auf Englisch zurück, wenn die angeforderte Sprache nicht verfügbar ist.",
+                instructionsTitle: "Wie es Funktioniert",
+                instructionsText: "Diese Seite überprüft den \"X-site-language\"-Header beim Laden. Wenn der Header vorhanden ist und einen unterstützten Sprachcode (en, es, fr, de, uk) enthält, wird der Seiteninhalt automatisch in dieser Sprache angezeigt. Sie können auch manuell zwischen Sprachen mit den Buttons oben wechseln.",
+                footerText: "© 2024 Mehrsprachige Beispielseite. Erstellt mit modernen Web-Technologien."
+            },
+            uk: {
+                pageTitle: "Багатомовна Прикладна Сторінка",
+                currentLang: "Поточна Мова: Українська",
+                statusIndicator: "Активна",
+                welcomeTitle: "Ласкаво просимо на нашу прикладну сторінку",
+                welcomeText: "Це демонстрація багатомовного веб-сайту, який автоматично визначає бажану мову користувача на основі заголовка X-site-language. Вміст сторінки буде динамічно змінюватися, щоб забезпечити найкращий користувацький досвід їхньою бажаною мовою.",
+                featuresTitle: "Ключові Особливості",
+                feature1Title: "Визначення Мови",
+                feature1Desc: "Автоматично визначає мову з HTTP-заголовків і відображає відповідний контент.",
+                feature2Title: "Адаптивний Дизайн",
+                feature2Desc: "Красивий, сучасний дизайн, який ідеально працює на всіх пристроях та розмірах екрану.",
+                feature3Title: "Перемикання в Реальному Часі",
+                feature3Desc: "Користувачі можуть вручну перемикати мови за допомогою кнопок вибору мови.",
+                feature4Title: "Підтримка Резервного Варіанту",
+                feature4Desc: "Елегантно повертається до англійської мови, якщо запитана мова недоступна.",
+                instructionsTitle: "Як Це Працює",
+                instructionsText: "Ця сторінка перевіряє заголовок \"X-site-language\" при завантаженні. Якщо заголовок присутній і містить підтримуваний код мови (en, es, fr, de, uk), вміст сторінки автоматично відобразиться цією мовою. Ви також можете вручну перемикати мови за допомогою кнопок вище.",
+                footerText: "© 2024 Багатомовна Прикладна Сторінка. Створена з сучасними веб-технологіями."
+            }
+        };
+
+        // Function to get language from various sources
+        function getLanguageFromHeader() {
+            // Method 1: Check URL parameters
+            const urlParams = new URLSearchParams(window.location.search);
+            const urlLang = urlParams.get('lang');
+            
+            // Method 2: Check localStorage for user preference
+            const storedLang = localStorage.getItem('preferredLanguage');
+            
+            // Method 3: Detect from hostname (for ingress routing)
+            const hostname = window.location.hostname;
+            let hostLang = null;
+            if (hostname.includes('en.aidlc.ukad.dev')) {
+                hostLang = 'en';
+            } else if (hostname.includes('es.aidlc.ukad.dev')) {
+                hostLang = 'es';
+            } else if (hostname.includes('fr.aidlc.ukad.dev')) {
+                hostLang = 'fr';
+            } else if (hostname.includes('de.aidlc.ukad.dev')) {
+                hostLang = 'de';
+            } else if (hostname.includes('uk.aidlc.ukad.dev')) {
+                hostLang = 'uk';
+            }
+            
+            // Priority: URL param > Hostname > Stored preference > Default
+            const detectedLang = urlLang || hostLang || storedLang;
+            
+            // Check if the language is supported
+            if (detectedLang && languages[detectedLang]) {
+                return detectedLang;
+            }
+            
+            // Default to English
+            return 'en';
+        }
+
+        // Function to set language and update content
+        function setLanguage(langCode) {
+            if (!languages[langCode]) {
+                console.warn(`Language ${langCode} not supported`);
+                return;
+            }
+
+            // Update document language attribute
+            document.documentElement.lang = langCode;
+            
+            // Update all text content
+            const langData = languages[langCode];
+            Object.keys(langData).forEach(key => {
+                const element = document.getElementById(key);
+                if (element) {
+                    element.textContent = langData[key];
+                }
+            });
+
+            // Update active language button
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.querySelector(`[onclick="setLanguage('${langCode}')"]`).classList.add('active');
+
+            // Store preference
+            localStorage.setItem('preferredLanguage', langCode);
+        }
+
+        // Initialize page on load
+        document.addEventListener('DOMContentLoaded', function() {
+            const detectedLang = getLanguageFromHeader();
+            setLanguage(detectedLang);
+            
+            // Add some demo functionality
+            console.log('Multi-language page loaded');
+            console.log('Detected language:', detectedLang);
+            console.log('Current hostname:', window.location.hostname);
+            console.log('URL parameters:', window.location.search);
+            console.log('Available languages:', Object.keys(languages));
+            
+            // Show current language in the UI
+            const currentLangElement = document.getElementById('currentLang');
+            if (currentLangElement) {
+                const langNames = {
+                    'en': 'English',
+                    'es': 'Español', 
+                    'fr': 'Français',
+                    'de': 'Deutsch',
+                    'uk': 'Українська'
+                };
+                currentLangElement.textContent = `Current Language: ${langNames[detectedLang] || 'English'}`;
+            }
+        });
+
+        // Add keyboard shortcuts for language switching
+        document.addEventListener('keydown', function(e) {
+            if (e.altKey) {
+                switch(e.key) {
+                    case '1':
+                        setLanguage('en');
+                        break;
+                    case '2':
+                        setLanguage('es');
+                        break;
+                    case '3':
+                        setLanguage('fr');
+                        break;
+                    case '4':
+                        setLanguage('de');
+                        break;
+                    case '5':
+                        setLanguage('uk');
+                        break;
+                }
+            }
+        });
+    </script>
+</body>
+</html>

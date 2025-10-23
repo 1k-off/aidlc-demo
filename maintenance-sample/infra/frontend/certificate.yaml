@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: aidlc-frontend-ssl
+  namespace: aidlc-demo
+spec:
+  secretName: aidlc-frontend-ssl
+  issuerRef:
+    name: letsencrypt-dns-cloudflare
+    kind: ClusterIssuer
+  dnsNames:
+    - en.aidlc.ukad.dev
+    - es.aidlc.ukad.dev
+    - fr.aidlc.ukad.dev
+    - de.aidlc.ukad.dev
+    - uk.aidlc.ukad.dev
